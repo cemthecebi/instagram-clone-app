@@ -1,28 +1,19 @@
 import "./App.css";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Post from "./Post";
+import { db } from "./firebase";
 
 function App() {
-  const [posts, setPosts] = useState([
-    {
-      username: "furkankocer",
-      caption: "Best photo of the year",
-      imageUrl:
-        "https://www.freecodecamp.org/news/content/images/size/w600/2020/02/Ekran-Resmi-2019-11-18-18.08.13.png",
-    },
-    {
-      username: "malionde",
-      caption: "Cool!",
-      imageUrl:
-        "https://www.freecodecamp.org/news/content/images/size/w600/2020/02/Ekran-Resmi-2019-11-18-18.08.13.png",
-    },
-    {
-      username: "cemthecebi",
-      caption: "Amazing Day!",
-      imageUrl:
-        "https://www.freecodecamp.org/news/content/images/size/w600/2020/02/Ekran-Resmi-2019-11-18-18.08.13.png",
-    },
-  ]);
+  const [posts, setPosts] = useState([]);
+
+  // useEffect run a piece of code based on specific condition
+
+  useEffect(() => {
+    db.collection("posts").onSnapshot((snapshot) => {
+      setPosts(snapshot.docs.map((doc) => doc.data()));
+    });
+  }, [posts]); // if we set empty it will run only
+  // when app lunch and every single time posts changes
 
   return (
     <div className="app">
